@@ -1,56 +1,191 @@
-{% load static %}
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" class="h-full bg-gray-950">
 <head>
     <meta charset="UTF-8">
-    <title>My Blog App</title>
-
-<!-- CSS -->
-<link rel="stylesheet" href="{% static 'blog/style.css' %}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpsFlow | AI ERP Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    boxShadow: {
+                        glow: '0 0 0 1px rgba(168, 85, 247, 0.25), 0 20px 60px rgba(0, 0, 0, 0.45)',
+                    },
+                },
+            },
+        };
+    </script>
 
 </head>
-<body>
+<body class="min-h-full bg-gray-950 text-white antialiased">
+<div class="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(168,85,247,0.18),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(59,130,246,0.12),_transparent_24%),linear-gradient(180deg,_#030712_0%,_#030712_100%)]">
+    <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:72px_72px] opacity-20"></div>
 
-<h1>🚀 Blog Management System</h1>
-<hr>
-<a href="/dashboard/">Dashboard</a>
-<a href="/">Blogs</a>
-<a href="/leads/">Leads</a>
-<a href="/files/">Files</a>
-<a href="/excel/">Excel</a>
-<hr>
-<!-- Auth Section -->
-{% if user.is_authenticated %}
-    <p>Welcome, {{ user.username }}</p>
-
-    <!-- Logout (POST method required) -->
-    <form action="{% url 'logout' %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">
-            Logout
-        </button>
-    </form>
-
-{% else %}
-    <a href="{% url 'login' %}">Login</a>
-    |
-    <a href="{% url 'register' %}">Register</a>
-{% endif %}
-
-<hr>
-{% if messages %}
-    {% for message in messages %}
-        <div style="padding:10px; margin:10px 0; border:1px solid #ccc; background:#f8f8f8;">
-            {{ message }}
+    <aside class="fixed inset-y-0 left-0 z-40 hidden w-72 border-r border-white/10 bg-gray-950/90 backdrop-blur-xl lg:flex lg:flex-col">
+        <div class="border-b border-white/10 px-6 py-6">
+            <div class="flex items-center gap-3">
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-500 shadow-glow">
+                    <span class="text-sm font-bold">OF</span>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.3em] text-gray-500">OpsFlow</p>
+                    <h1 class="text-lg font-semibold text-white">AI ERP Command Center</h1>
+                </div>
+            </div>
         </div>
-    {% endfor %}
-{% endif %}
-<!-- Main Content -->
-{% block content %}
-{% endblock %}
+
+        <nav class="flex-1 px-4 py-6">
+            <p class="px-3 text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">Navigation</p>
+            <div class="mt-4 space-y-2">
+                <a href="/dashboard/" class="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3 text-sm font-semibold text-white ring-1 ring-inset ring-purple-500/20 transition duration-200 ease-in-out">
+                    <span class="h-2.5 w-2.5 rounded-full bg-indigo-500 shadow-[0_0_16px_rgba(99,102,241,0.8)]"></span>
+                    Dashboard
+                </a>
+                <a href="/" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-gray-300 transition duration-200 ease-in-out hover:-translate-y-0.5 hover:bg-white/5 hover:text-white">
+                    <span class="h-2.5 w-2.5 rounded-full bg-purple-500 shadow-[0_0_16px_rgba(168,85,247,0.8)]"></span>
+                    Blogs
+                </a>
+                <a href="/leads/" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-gray-300 transition duration-200 ease-in-out hover:-translate-y-0.5 hover:bg-white/5 hover:text-white">
+                    <span class="h-2.5 w-2.5 rounded-full bg-blue-500 shadow-[0_0_16px_rgba(59,130,246,0.8)]"></span>
+                    Leads
+                </a>
+                <a href="/files/" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-gray-300 transition duration-200 ease-in-out hover:-translate-y-0.5 hover:bg-white/5 hover:text-white">
+                    <span class="h-2.5 w-2.5 rounded-full bg-cyan-500 shadow-[0_0_16px_rgba(34,211,238,0.6)]"></span>
+                    Files
+                </a>
+                <a href="/excel/" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-gray-300 transition duration-200 ease-in-out hover:-translate-y-0.5 hover:bg-white/5 hover:text-white">
+                    <span class="h-2.5 w-2.5 rounded-full bg-violet-400 shadow-[0_0_16px_rgba(196,181,253,0.6)]"></span>
+                    Excel Data
+                </a>
+            </div>
+        </nav>
+
+        <div class="border-t border-white/10 px-4 py-5">
+            {% if user.is_authenticated %}
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p class="text-xs uppercase tracking-[0.3em] text-gray-500">Signed in as</p>
+                    <p class="mt-1 text-sm font-medium text-white">{{ user.username }}</p>
+                    <form action="{% url 'logout' %}" method="post" class="mt-4">
+                        {% csrf_token %}
+                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-white/5 px-4 py-2.5 text-sm font-semibold text-gray-200 transition duration-200 ease-in-out hover:bg-red-500/20 hover:text-white">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="grid gap-2">
+                    <a href="{% url 'login' %}" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition duration-200 ease-in-out hover:scale-[1.02] hover:from-purple-400 hover:to-indigo-400">
+                        Login
+                    </a>
+                    <a href="{% url 'register' %}" class="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-gray-200 transition duration-200 ease-in-out hover:border-purple-500/40 hover:bg-purple-500/10 hover:text-white">
+                        Register
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </aside>
+
+    <div class="relative lg:pl-72">
+        <header class="sticky top-0 z-30 border-b border-white/10 bg-gray-950/70 backdrop-blur-xl">
+            <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.3em] text-gray-500">OpsFlow</p>
+                    <h2 class="text-lg font-semibold text-white">AI-powered ERP Dashboard</h2>
+                </div>
+                <div class="flex items-center gap-3 text-sm text-gray-400">
+                    <div class="hidden rounded-full border border-white/10 bg-white/5 px-3 py-1.5 lg:block">
+                        <span class="text-gray-300">{{ user.username }}</span>
+                    </div>
+                    <div class="rounded-full bg-purple-500/15 px-3 py-1.5 text-purple-300 ring-1 ring-inset ring-purple-500/20">Live</div>
+                </div>
+            </div>
+            <div class="mx-auto flex max-w-7xl flex-wrap gap-2 px-4 pb-4 sm:px-6 lg:hidden lg:px-8">
+                <a href="/dashboard/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-300">Dashboard</a>
+                <a href="/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-300">Blogs</a>
+                <a href="/leads/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-300">Leads</a>
+                <a href="/files/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-300">Files</a>
+                <a href="/excel/" class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-300">Excel Data</a>
+            </div>
+        </header>
+
+        <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+            {% if messages %}
+                <div class="mb-6 space-y-3">
+                    {% for message in messages %}
+                        <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-gray-200 shadow-lg shadow-black/20 backdrop-blur-xl">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+</div>
+
+<style>
+    .errorlist {
+        margin: 0 0 0.75rem;
+        padding: 0;
+        list-style: none;
+    }
+
+    .errorlist li {
+        border-radius: 0.9rem;
+        border: 1px solid rgba(248, 113, 113, 0.25);
+        background: rgba(239, 68, 68, 0.12);
+        padding: 0.65rem 0.9rem;
+        color: #fecaca;
+        font-size: 0.875rem;
+    }
+
+    form p {
+        margin-bottom: 1rem;
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 0.45rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #e5e7eb;
+    }
+
+    form input,
+    form select,
+    form textarea {
+        width: 100%;
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(17, 24, 39, 0.8);
+        padding: 0.85rem 1rem;
+        color: #f9fafb;
+        outline: none;
+        transition: all 200ms ease-in-out;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+
+    form input:focus,
+    form select:focus,
+    form textarea:focus {
+        border-color: rgba(168, 85, 247, 0.65);
+        box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.18);
+    }
+
+    form input::placeholder,
+    form textarea::placeholder {
+        color: #6b7280;
+    }
+
+    button,
+    .button-link {
+        cursor: pointer;
+    }
+</style>
 
 </body>
 </html>

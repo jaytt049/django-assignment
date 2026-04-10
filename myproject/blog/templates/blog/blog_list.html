@@ -2,66 +2,125 @@
 
 {% block content %}
 
-<h2>All Blogs</h2>
-<form method="GET">
-
-    <input type="text" name="q" placeholder="Search..." value="{{ query }}">
-
-    <select name="category">
-        <option value="">All Categories</option>
-        {% for cat in categories %}
-            <option value="{{ cat.id }}"
-                {% if cat.id|stringformat:"s" == selected_category %}selected{% endif %}>
-                {{ cat.name }}
-            </option>
-        {% endfor %}
-    </select>
-
-    <button type="submit">Apply</button>
-</form>
-<a href="{% url 'add_blog' %}">➕ Add Blog</a>
-
-<ul>
-    {% for blog in blogs %}
-        <li>
-            {% if blog.image %}
-                <img src="{{ blog.image.url }}" width="200">
-            {% endif %}
-            <h3>{{ blog.title }}</h3>
-            <p>{{ blog.description }}</p>
-            <small>
-                Category: {{ blog.category.name }} |
-                Date: {{ blog.date }}
-            </small>
-            {% if blog.file %}
-                <a href="{{ blog.file.url }}" target="_blank">📄 Download File</a>
-            {% endif %}
-
-            <br>
-            Tags:
-            {% for tag in blog.tags.all %}
-                <span>{{ tag.name }}</span>
-            {% endfor %}
-
-            <hr>
-            <a href="{% url 'edit_blog' blog.id %}">✏ Edit</a>
-            <a href="{% url 'delete_blog' blog.id %}" onclick="return confirm('Are you sure?')">
-                ❌ Delete
+<div class="space-y-8">
+    <section class="rounded-3xl border border-white/10 bg-gray-900/70 p-6 shadow-glow backdrop-blur-xl sm:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div class="max-w-2xl">
+                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-purple-300/80">Content hub</p>
+                <h2 class="mt-3 text-3xl font-semibold text-white sm:text-4xl">All Blogs</h2>
+                <p class="mt-3 text-sm leading-6 text-gray-400">Track published content, manage attachments, and keep your OpsFlow knowledge base clean and current.</p>
+            </div>
+            <a href="{% url 'add_blog' %}" class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition duration-200 ease-in-out hover:scale-[1.02] hover:from-purple-400 hover:to-indigo-400">
+                ➕ Add Blog
             </a>
-        </li>
-    {% empty %}
-        <p>No blogs available</p>
-    {% endfor %}
-</ul>
-<div>
-    {% if blogs.has_previous %}
-        <a href="?page={{ blogs.previous_page_number }}">⬅ Prev</a>
-    {% endif %}
+        </div>
 
-    <span>Page {{ blogs.number }} of {{ blogs.paginator.num_pages }}</span>
+        <form method="GET" class="mt-8 grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 sm:p-5 lg:grid-cols-[1.3fr_1fr_auto] lg:items-end">
+            <div>
+                <label class="mb-2 block text-sm font-semibold text-gray-200">Search</label>
+                <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+            </div>
 
-    {% if blogs.has_next %}
-        <a href="?page={{ blogs.next_page_number }}">Next ➡</a>
-    {% endif %}
+            <div>
+                <label class="mb-2 block text-sm font-semibold text-gray-200">Category</label>
+                <select name="category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}"
+                            {% if cat.id|stringformat:"s" == selected_category %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-white/10 px-5 py-3 text-sm font-semibold text-white transition duration-200 ease-in-out hover:bg-purple-500 hover:text-white">
+                Apply Filters
+            </button>
+        </form>
+    </section>
+
+    <div class="grid gap-4 sm:grid-cols-3">
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/20 backdrop-blur-xl">
+            <p class="text-xs uppercase tracking-[0.3em] text-gray-500">Published</p>
+            <p class="mt-3 text-3xl font-semibold text-white">{{ blogs.paginator.count }}</p>
+        </div>
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/20 backdrop-blur-xl">
+            <p class="text-xs uppercase tracking-[0.3em] text-gray-500">Page</p>
+            <p class="mt-3 text-3xl font-semibold text-white">{{ blogs.number }}</p>
+        </div>
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/20 backdrop-blur-xl">
+            <p class="text-xs uppercase tracking-[0.3em] text-gray-500">Pages</p>
+            <p class="mt-3 text-3xl font-semibold text-white">{{ blogs.paginator.num_pages }}</p>
+        </div>
+    </div>
+
+    <div class="space-y-6">
+        {% for blog in blogs %}
+            <article class="overflow-hidden rounded-3xl border border-white/10 bg-gray-900/75 shadow-xl shadow-black/30 backdrop-blur-xl transition duration-200 ease-in-out hover:-translate-y-1 hover:border-purple-500/30">
+                <div class="grid lg:grid-cols-[320px_1fr]">
+                    <div class="relative min-h-64 bg-gray-950/90">
+                        {% if blog.image %}
+                            <img src="{{ blog.image.url }}" class="h-full w-full object-cover">
+                        {% else %}
+                            <div class="flex min-h-64 items-center justify-center p-6 text-center text-sm text-gray-500">
+                                No cover image available
+                            </div>
+                        {% endif %}
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent"></div>
+                    </div>
+
+                    <div class="p-6 sm:p-8">
+                        <div class="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em]">
+                            <span class="rounded-full bg-purple-500/15 px-3 py-1 text-purple-300 ring-1 ring-inset ring-purple-500/20">{{ blog.category.name }}</span>
+                            <span class="rounded-full bg-white/5 px-3 py-1 text-gray-400 ring-1 ring-inset ring-white/10">{{ blog.date }}</span>
+                        </div>
+
+                        <h3 class="mt-4 text-2xl font-semibold text-white sm:text-3xl">{{ blog.title }}</h3>
+                        <p class="mt-4 text-sm leading-7 text-gray-400">{{ blog.description }}</p>
+
+                        <div class="mt-5 flex flex-wrap gap-2">
+                            {% for tag in blog.tags.all %}
+                                <span class="rounded-full bg-indigo-500/15 px-3 py-1 text-xs font-semibold text-indigo-300 ring-1 ring-inset ring-indigo-500/20">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            {% if blog.file %}
+                                <a href="{{ blog.file.url }}" target="_blank" class="inline-flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-2.5 text-sm font-semibold text-gray-200 ring-1 ring-inset ring-white/10 transition duration-200 ease-in-out hover:bg-blue-500/15 hover:text-white">
+                                    📄 Download File
+                                </a>
+                            {% endif %}
+                            <a href="{% url 'edit_blog' blog.id %}" class="inline-flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-2.5 text-sm font-semibold text-gray-200 ring-1 ring-inset ring-white/10 transition duration-200 ease-in-out hover:bg-purple-500/15 hover:text-white">
+                                ✏ Edit
+                            </a>
+                            <a href="{% url 'delete_blog' blog.id %}" onclick="return confirm('Are you sure?')" class="inline-flex items-center gap-2 rounded-2xl bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-red-200 ring-1 ring-inset ring-red-500/20 transition duration-200 ease-in-out hover:bg-red-500 hover:text-white">
+                                ❌ Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <div class="rounded-3xl border border-dashed border-white/15 bg-white/5 p-12 text-center shadow-lg shadow-black/20 backdrop-blur-xl">
+                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-500/15 text-2xl text-purple-300 ring-1 ring-inset ring-purple-500/20">✦</div>
+                <h3 class="mt-5 text-xl font-semibold text-white">No blogs available</h3>
+                <p class="mt-2 text-sm text-gray-400">Publish the first OpsFlow insight to fill this space.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 text-sm text-gray-300 shadow-lg shadow-black/20 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
+        <p>Page {{ blogs.number }} of {{ blogs.paginator.num_pages }}</p>
+        <div class="flex items-center gap-3">
+            {% if blogs.has_previous %}
+                <a href="?page={{ blogs.previous_page_number }}" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 font-semibold text-gray-200 transition duration-200 ease-in-out hover:bg-white/10">⬅ Prev</a>
+            {% endif %}
+
+            {% if blogs.has_next %}
+                <a href="?page={{ blogs.next_page_number }}" class="rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-2 font-semibold text-white transition duration-200 ease-in-out hover:from-purple-400 hover:to-indigo-400">Next ➡</a>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

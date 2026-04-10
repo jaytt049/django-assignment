@@ -2,12 +2,20 @@
 
 {% block content %}
 
-<h2>Upload Excel/CSV</h2>
+<div class="mx-auto max-w-3xl">
+    <section class="rounded-3xl border border-white/10 bg-gray-900/75 p-6 shadow-glow backdrop-blur-xl sm:p-8">
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-purple-300/80">Import pipeline</p>
+        <h2 class="mt-3 text-3xl font-semibold text-white">Upload Excel/CSV</h2>
+        <p class="mt-3 text-sm leading-6 text-gray-400">Import spreadsheet data into OpsFlow with a secure upload flow.</p>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
+        <form method="POST" enctype="multipart/form-data" class="mt-8 space-y-6">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition duration-200 ease-in-out hover:scale-[1.02] hover:from-purple-400 hover:to-indigo-400">
+                Upload
+            </button>
+        </form>
+    </section>
+</div>
 
 {% endblock %}
