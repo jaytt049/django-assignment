@@ -1,0 +1,31 @@
+{% extends 'leads/base.html' %}
+
+{% block content %}
+
+<h2>Leads</h2>
+
+<a href="{% url 'add_lead' %}">➕ Add Lead</a>
+
+<form method="GET">
+    <input type="text" name="q" placeholder="Search...">
+    <select name="status">
+        <option value="">All</option>
+        <option value="new">New</option>
+        <option value="contacted">Contacted</option>
+        <option value="closed">Closed</option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+<ul>
+{% for lead in leads %}
+    <li>
+        {{ lead.name }} - {{ lead.email }} - {{ lead.status }}
+
+        <a href="{% url 'edit_lead' lead.id %}">Edit</a>
+        <a href="{% url 'delete_lead' lead.id %}">Delete</a>
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock %}

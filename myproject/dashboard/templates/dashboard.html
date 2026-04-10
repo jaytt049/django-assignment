@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+{% if is_admin %}
+    <h2>👑 Admin Panel</h2>
+    <p>Total Users: {{ total_users }}</p>
+    <p>Total Blogs: {{ total_blogs }}</p>
+    <p>Total Leads: {{ total_leads }}</p>
+    <p>Total Files: {{ total_files }}</p>
+    <p>Total Records: {{ total_records }}</p>
+
+{% else %}
+    <h2>👤 User Dashboard</h2>
+    <p>Your Blogs: {{ total_blogs }}</p>
+    <p>Your Leads: {{ total_leads }}</p>
+    <p>Your Files: {{ total_files }}</p>
+    <p>Your Records: {{ total_records }}</p>
+{% endif %}
+
+{% endblock %}

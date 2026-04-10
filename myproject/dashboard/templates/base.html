@@ -1,0 +1,56 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Blog App</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="{% static 'blog/style.css' %}">
+
+
+</head>
+<body>
+
+<h1>🚀 Blog Management System</h1>
+<hr>
+<a href="/dashboard/">Dashboard</a>
+<a href="/">Blogs</a>
+<a href="/leads/">Leads</a>
+<a href="/files/">Files</a>
+<a href="/excel/">Excel</a>
+<hr>
+<!-- Auth Section -->
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}</p>
+
+    <!-- Logout (POST method required) -->
+    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">
+            Logout
+        </button>
+    </form>
+
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+    |
+    <a href="{% url 'register' %}">Register</a>
+{% endif %}
+
+<hr>
+{% if messages %}
+    {% for message in messages %}
+        <div style="padding:10px; margin:10px 0; border:1px solid #ccc; background:#f8f8f8;">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<!-- Main Content -->
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
