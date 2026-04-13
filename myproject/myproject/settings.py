@@ -28,6 +28,10 @@ SECRET_KEY = 'django-insecure-iv&^d-yukh1%lpu1z73k$7!0b*)u1gl9s%%6_kw=n8+dm55$b$
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['25fd-2401-4900-8899-496d-4523-62c5-6a06-2222.ngrok-free.app']
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://25fd-2401-4900-8899-496d-4523-62c5-6a06-2222.ngrok-free.app",
+# ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

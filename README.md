@@ -1,13 +1,14 @@
-# Django Blog Assignment
+# Django Assignment
 
-This repository contains a Django blog application with:
+This repository contains a multi-module Django project that combines:
 
-- User registration and login/logout
-- Blog create, edit, delete, and list views
-- Category and tag support
-- Image and file upload for blog posts
-- CSV upload for bulk blog creation
-- Basic REST API endpoints for listing and creating blogs
+- Blog management (CRUD, categories, tags, image/file upload)
+- User authentication (register, login, logout)
+- Lead management (CRM-style tracking)
+- Generic file upload and categorization
+- CSV/Excel upload and database import
+- Dashboard analytics for users and admins
+- Basic REST API endpoints for blogs
 
 ## Tech Stack
 
@@ -15,78 +16,126 @@ This repository contains a Django blog application with:
 - Django 5.2.13
 - Django REST Framework 3.17.1
 - SQLite (default database)
+- Pandas + OpenPyXL (CSV/XLSX parsing)
+- Pillow (image upload support)
 
-## Project Layout
+## Project Structure
 
-- `myproject/manage.py` - Django management entry point
-- `myproject/myproject/settings.py` - project settings
-- `myproject/blog/` - main app (models, views, forms, templates, api)
-- `myproject/db.sqlite3` - SQLite database
-- `blog.csv` - sample CSV file for upload feature
+- myproject/manage.py: Django management entry point
+- myproject/myproject/settings.py: global settings
+- myproject/myproject/urls.py: root URL routing
+- myproject/blog/: blog app (web + API)
+- myproject/leads/: lead management app
+- myproject/files/: file management app
+- myproject/excel/: CSV/Excel import app
+- myproject/dashboard/: metrics dashboard app
+- myproject/media/: uploaded files and images
+- REVISION_GUIDE.md: complete revision notes for interview/exam prep
 
-## Prerequisites
+## Requirements
 
-- Python 3.10+ (recommended)
+- Python 3.10+
 - pip
 
-## How To Run
+Install dependencies from repository root:
 
-1. Open terminal at the repository root (`django-assignment`).
-2. Create a virtual environment:
+1. Create virtual environment:
+	python -m venv venv
+2. Activate (PowerShell):
+	.\venv\Scripts\Activate.ps1
+3. Install packages:
+	pip install -r requirements.txt
 
-```powershell
-python -m venv .venv
-```
+Main dependencies:
 
-3. Activate the virtual environment:
+- Django==5.2.13
+- djangorestframework==3.17.1
+- pillow==12.2.0
+- pandas
+- openpyxl
 
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
+## Run The Project
 
-4. Install dependencies:
+From repository root:
 
-```powershell
-pip install -r requirements.txt
-```
+1. cd myproject
+2. python manage.py migrate
+3. python manage.py runserver
 
-5. Move into the Django project directory:
+Open:
 
-```powershell
-cd myproject
-```
+- http://127.0.0.1:8000/
+- http://127.0.0.1:8000/admin/
 
-6. Apply migrations:
+## URL Map
 
-```powershell
-python manage.py migrate
-```
+Root routes:
 
-7. Start the development server:
+- / -> blog app
+- /accounts/ -> Django auth routes
+- /leads/ -> leads app
+- /files/ -> files app
+- /excel/ -> excel app
+- /dashboard/ -> dashboard app
+- /admin/ -> admin panel
 
-```powershell
-python manage.py runserver
-```
+Blog routes:
 
-8. Open in browser:
+- / -> blog list with search/filter/pagination
+- /add/ -> add blog
+- /edit/<id>/ -> edit blog (owner only)
+- /delete/<id>/ -> delete blog (owner only)
+- /register/ -> registration
+- /upload_csv/ -> CSV upload for blog creation
+- /api/blogs/ -> list blog API
+- /api/add-blog/ -> create blog API
 
-- Home page: `http://127.0.0.1:8000/`
-- Admin: `http://127.0.0.1:8000/admin/`
+## Key Features By App
 
-## Main Routes
+blog:
 
-- `/` - blog list
-- `/add/` - add blog (login required)
-- `/edit/<id>/` - edit blog (owner only)
-- `/delete/<id>/` - delete blog (owner only)
-- `/register/` - user registration
-- `/accounts/login/` - login
-- `/upload_csv/` - CSV upload (login required)
-- `/api/blogs/` - list blogs API
-- `/api/add-blog/` - create blog API
+- Category and tag support
+- Image and file uploads per post
+- Search by title/description
+- Category filter and pagination
+- Owner-based edit/delete authorization
+- Registration flow with welcome email
 
-## Notes
+leads:
 
-- Media uploads are stored in `myproject/media/`.
-- Static files are served by Django in development mode.
-- Email settings are configured for SMTP in project settings.
+- Add/edit/delete leads
+- Status tracking: new/contacted/closed
+- Per-user lead access
+
+files:
+
+- Upload files with category
+- Per-user file listing and filtering
+
+excel:
+
+- Upload CSV or Excel files
+- Parse rows into DataRecord table using Pandas
+- Per-user data listing
+
+dashboard:
+
+- Admin sees global totals
+- Normal users see their own totals only
+
+## Authentication And Access
+
+- Login is required for most create/update/delete actions.
+- Login route: /accounts/login/
+- Owner checks are enforced in blog and leads operations.
+
+## Media And Static
+
+- Uploaded content is stored in myproject/media/.
+- Media is served in development via URL config.
+
+## Study Notes
+
+For full revision notes (models, flow, common viva questions), see:
+
+- REVISION_GUIDE.md
